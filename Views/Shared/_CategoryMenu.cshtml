@@ -1,0 +1,16 @@
+﻿
+@model List<ElectronicShop.Models.Category>
+
+<div class="card mb-4">
+    <div class="list-group-item active">Danh mục</div>
+    <ul class="category-list list-group list-group-flush">
+        @foreach (var cat in Model)
+        {
+            <li class="list-group-item">
+                <a href="@Url.Action("ByCategory", "Products", new { categoryId = cat.Id })" class="text-decoration-none">
+                    @cat.Name
+                </a>
+            </li>
+        }
+    </ul>
+</div>

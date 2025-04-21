@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Kết quả tìm kiếm";
+}
+@model PagedList.IPagedList<ElectronicShop.Models.Product>
+@using PagedList.Mvc;
+<!-- Custom style -->
+<link rel="stylesheet" href="~/Content/PagedList.css" />
+
+<div class="container">
+    <div class="row">
+        <!-- Jumbotron -->
+        <div class="container mt-3">
+            <div class="row align-items-center mt-3">
+                <!-- Jumbotron -->
+                <div class="col-md-6">
+                    <div class="p-4 bg-light rounded">
+                        <nav>
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">@Html.ActionLink("Trang chủ", "Index", "Home")</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <!-- Form tìm kiếm giữ lại dữ liệu -->
+                    @using (Html.BeginForm("Search", "Products", FormMethod.Get))
+                    {
+                        <div class="input-group mb-3">
+                            <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control" placeholder="Tìm kiếm sản phẩm..." />
+                            @Html.DropDownList("categoryId", ViewBag.Categories as SelectList, "Tất cả danh mục", new { @class = "form-select" })
+                            <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Categories -->
+        <div class="col-md-3">
+            @Html.Action("CategoryMenu", "Products")
+        </div>
+
+        <div class="row col-md-9">
+            <!-- Danh sách sản phẩm -->
+            @if (Model != null && Model.Any())
+            {
+                <div class="row">
+                    @foreach (var p in Model)
+                    {
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <img src="@Url.Content("~/Content/Images/Products/" + p.ImageUrl)" class="card-img-top" alt="@p.Name" />
+                                <div class="card-body">
+                                    <h5 class="card-title">@p.Name</h5>
+                                    <p class="card-text text-danger">@String.Format("{0:N0} đ", p.Price)</p>
+                                    <a href="@Url.Action("Details", "Products", new { id = p.Id })" class="btn btn-primary">Xem chi tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>Không tìm thấy sản phẩm phù hợp.</p>
+            }
+            <!-- Pagination -->
+            <nav>
+                @if (Model.PageCount > 1)
+                {
+                    <div class="text-center">
+                        @Html.PagedListPager(Model, page => Url.Action("Search", new
+                        {
+                            page,
+                            keyword = ViewBag.Keyword,
+                            categoryId = ViewBag.CategoryId
+                        }))
+                    </div>
+                }
+            </nav>
+
+
+        </div>
+    </div>
+</div>

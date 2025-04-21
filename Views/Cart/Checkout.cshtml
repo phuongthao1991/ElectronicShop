@@ -1,0 +1,47 @@
+﻿@model List<ElectronicShop.Models.CartItem>
+@{
+    ViewBag.Title = "Xác nhận đặt hàng";
+}
+
+<h2>Xác nhận đơn hàng</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Sản phẩm</th>
+        <th>Hình ảnh</th>
+        <th>Số lượng</th>
+        <th>Giá</th>
+        <th>Thành tiền</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ProductName</td>
+            <td><img src="@Url.Content(item.ImageUrl)" width="80" /></td>
+            <td>@item.Quantity</td>
+            <td>@item.Price.ToString("N0") ₫</td>
+            <td>@(item.Quantity * item.Price).ToString("N0") ₫</td>
+        </tr>
+    }
+</table>
+
+<h4 class="text-right">
+    Tổng tiền: <strong>@Model.Sum(i => i.Price * i.Quantity).ToString("N0") ₫</strong>
+</h4>
+
+@using (Html.BeginForm("Checkout", "Cart", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label>Phương thức thanh toán:</label>
+        <select name="paymentMethod" class="form-control" required>
+            <option value="COD">Thanh toán khi nhận hàng</option>
+            <option value="Banking">Chuyển khoản ngân hàng</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        <i class="fa fa-check"></i> Xác nhận đặt hàng
+    </button>
+}

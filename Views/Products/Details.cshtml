@@ -1,0 +1,134 @@
+﻿@model ElectronicShop.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+
+    <!-- Jumbotron -->
+    <div class="container mt-3">
+        <div class="p-4 bg-light rounded">
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">@Html.ActionLink("Trang chủ", "Index", "Home")</li>
+                    <li class="breadcrumb-item">@Html.ActionLink("Danh mục sản phẩm", "Index", "Categories")</li>
+                    <li class="breadcrumb-item active" aria-current="page">Chi tiết sản phẩm</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container mt-5 pt-4">
+        <div class="row">
+            <!-- Categories -->
+            <div class="col-md-3">
+                @Html.Action("CategoryMenu", "Products")
+            </div>
+
+            <div class="row col-md-9">
+                <div class="col-md-6">
+                    <img src="@Url.Content("~/Content/Images/Products/" + Model.ImageUrl)" class="img-fluid rounded" alt="@Model.Name">
+                </div>
+                <div class="col-md-6">
+                    <h2>@Model.Name</h2>
+                    <div class="mb-3">
+                        <span class="text-danger fs-4">@String.Format("{0:N0} đ", @Model.Price)</span>
+                        @{
+                            var discountedPrice = @Model.Price; // Giá sau giảm
+                            var originalPrice = discountedPrice / 0.8m; // Giá gốc
+                        }
+                        <span class="text-decoration-line-through text-muted ms-2">@String.Format("{0:N0} đ", @originalPrice)</span>
+                        <span class="badge bg-success ms-2">-10%</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="fw-bold">Mô tả:</span>
+                        <p>@Model.Description</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Số lượng:</label><label class="form-label text-warning">&#160(còn @Model.Stock sản phẩm)</label>
+                        <div class="input-group" style="width: 150px;">
+                            <button class="btn btn-outline-secondary" type="button">-</button>
+                            <input type="text" class="form-control text-center" value="1">
+                            <button class="btn btn-outline-secondary" type="button">+</button>
+                        </div>
+                    </div>
+                    @*Thêm vào giả hàng*@
+                    <button class="btn btn-outline-primary add-to-cart-btn" data-id="@Model.Id">
+                        <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+                    </button>
+
+                    @*Mua ngay*@
+                    <a href="@Url.Action("Checkout", "Cart")" class="btn btn-outline-primary">Mua ngay</a>
+
+                </div>
+
+                <!-- Product Tabs -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <ul class="nav nav-tabs" id="productTabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#specs">Thông số kỹ thuật</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#reviews">Đánh giá</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content p-3 border border-top-0 rounded-bottom">
+                            <div class="tab-pane fade show active" id="specs">
+                                @Model.Description
+                            </div>
+                            <div class="tab-pane fade" id="reviews">
+                                <div class="mb-3">
+                                    <h5>Đánh giá của bạn</h5>
+                                    <textarea class="form-control" rows="3"></textarea>
+                                    <button class="btn btn-primary mt-2">Gửi đánh giá</button>
+                                </div>
+                                <!-- Reviews list -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p>
+                    @if (Session["UserRole"] != null && Session["UserRole"].ToString() == "Admin")
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+                        @: |
+                        @Html.ActionLink("Back to List", "Index")
+                    }
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+@*Tăng giá trị số lượng*@
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const btns = document.querySelectorAll('.input-group button');
+
+        btns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const input = this.parentElement.querySelector('input');
+                let value = parseInt(input.value) || 0;
+                const stock = parseInt('@Model.Stock');
+
+                if (this.textContent.trim() === '+') {
+                    if (value < stock) value++;
+                } else if (this.textContent.trim() === '-') {
+                    if (value > 1) value--;
+                }
+
+                input.value = value;
+            });
+        });
+    });
+</script>
+
+

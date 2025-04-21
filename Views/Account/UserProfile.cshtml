@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Profile";
+}
+
+<h2>Profile</h2>
+
+@model ElectronicShop.Models.User
+
+<h2>Thông tin tài khoản</h2>
+
+<table class="table">
+    <tr><th>Họ tên</th><td>@Model.Name</td></tr>
+    <tr><th>Email</th><td>@Model.Email</td></tr>
+    <tr><th>Số điện thoại</th><td>@Model.Phone</td></tr>
+    <tr><th>Địa chỉ</th><td>@Model.Address</td></tr>
+    <tr><th>Vai trò</th><td>@Model.Role</td></tr>
+    <tr><th>Ngày tạo</th><td>@(Model.CreatedAt?.ToString("dd/MM/yyyy"))</td></tr>
+</table>
+
+
