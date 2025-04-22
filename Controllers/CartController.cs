@@ -236,7 +236,7 @@ namespace ElectronicShop.Controllers
             if (cart == null || !cart.Any())
             {
                 TempData["Error"] = "Giỏ hàng trống!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Checkout");
             }
 
             using (var dbContextTransaction = db.Database.BeginTransaction())

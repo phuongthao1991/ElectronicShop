@@ -23,25 +23,28 @@
         </tr>
         @for (int i = 0; i < Model.Count; i++)
         {
-            <tr>
-                <td>@Model[i].ProductName</td>
-                <td>
-                    <img src="@Url.Content(Model[i].ImageUrl ?? "~/Content/Images/no-image.png")" width="80" class="img-thumbnail" />
-                </td>
-                <td>
-                    <div class="input-group" style="max-width: 120px;">
-                        <div class="input-group-prepend">
-                            <button type="submit" name="action" value="decrease-@Model[i].ProductId" class="btn btn-outline-secondary btn-sm">-</button>
-                        </div>
-                        <input type="text" name="quantities[@Model[i].ProductId]" value="@Model[i].Quantity" class="form-control text-center" readonly />
-                        <div class="input-group-append">
-                            <button type="submit" name="action" value="increase-@Model[i].ProductId" class="btn btn-outline-secondary btn-sm">+</button>
-                        </div>
-                    </div>
-                </td>
-                <td>@Model[i].Price.ToString("N0") ₫</td>
-                <td>@(Model[i].Price * Model[i].Quantity).ToString("N0") ₫</td>
-            </tr>
+    <tr>
+        <td>@Model[i].ProductName</td>
+        <td>
+            <img src="@Url.Content("~/Content/Images/Products/" + Model[i].ImageUrl ?? "~/Content/Images/no-image.png")" width="80" class="img-thumbnail" />
+        </td>
+        <td>
+            <div class="input-group" style="max-width: 120px;">
+                <div class="input-group-prepend">
+                    <button type="submit" name="action" value="decrease-@Model[i].ProductId" class="btn btn-outline-secondary btn-sm">-</button>
+                </div>
+                <input type="text" name="quantities[@Model[i].ProductId]" value="@Model[i].Quantity" class="form-control text-center" readonly />
+                <div class="input-group-append">
+                    <button type="submit" name="action" value="increase-@Model[i].ProductId" class="btn btn-outline-secondary btn-sm">+</button>
+                </div>
+            </div>
+        </td>
+        <td>@Model[i].Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) ₫</td>
+        @{ 
+            var Total = Model[i].Price * Model[i].Quantity;
+        }
+        <td>@Total.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) ₫</td>
+    </tr>
         }
     </table>
 }
