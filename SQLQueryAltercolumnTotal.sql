@@ -1,0 +1,1 @@
+﻿ALTER TABLE Orders ALTER COLUMN TotalPrice DECIMAL(18, 2);

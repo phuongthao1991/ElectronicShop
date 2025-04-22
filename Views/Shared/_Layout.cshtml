@@ -103,7 +103,7 @@
     <script src="~/assets/js/main.js"></script>
 
     @*Add to cart*@
-        <script>
+    @*<script>
             function addToCart(productId) {
                 var token = $('input[name="__RequestVerificationToken"]').val();
                 $.ajax({
@@ -137,7 +137,62 @@
                     addToCart(productId);
                 });
             });
-        </script>
+        </script>*@
+    @* xử lý thêm vào giỏ hàng theo số lượng hoặc mặc định là 1 *@
+    <script>
+        function addToCart(productId, quantityInputSelector = null) {
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            var quantity = 1;
+
+            if (quantityInputSelector) {
+                var val = $(quantityInputSelector).val();
+                if ($.isNumeric(val) && parseInt(val) > 0) {
+                    quantity = parseInt(val);
+                }
+            }
+
+            $.ajax({
+                url: '/Cart/AddToCartAjax',
+                type: 'POST',
+                data: {
+                    __RequestVerificationToken: token,
+                    productId: productId,
+                    quantity: quantity
+                },
+                success: function (res) {
+                    if (res.success) {
+                        $("#cartCount").text(res.cartCount);
+                        $(".cart-count-badge").text(res.cartCount).show();
+
+                        var toast = new bootstrap.Toast(document.getElementById('cartToast'));
+                        toast.show();
+                    } else {
+                        alert("Không thêm được sản phẩm.");
+                    }
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    alert("Có lỗi xảy ra khi thêm sản phẩm.");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            // Dành cho nút thêm nhanh (số lượng mặc định là 1)
+            $(".add-to-cart-btn").click(function () {
+                var productId = $(this).data("id");
+                addToCart(productId);
+            });
+
+            // Dành cho trang chi tiết sản phẩm có chọn số lượng
+            $(".add-to-cart-with-qty-btn").click(function () {
+                var productId = $(this).data("id");
+                var qtySelector = $(this).data("qty-selector"); // ví dụ: "#quantityInput"
+                addToCart(productId, qtySelector);
+            });
+        });
+    </script>
+
 
 </body>
 

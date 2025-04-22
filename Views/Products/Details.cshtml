@@ -47,21 +47,33 @@
                         <p>@Model.Description</p>
                     </div>
 
+                    <!-- Số lượng -->
                     <div class="mb-3">
-                        <label class="form-label">Số lượng:</label><label class="form-label text-warning">&#160(còn @Model.Stock sản phẩm)</label>
+                        <label class="form-label">Số lượng:</label>
+                        <label class="form-label text-warning">&#160;(còn @Model.Stock sản phẩm)</label>
                         <div class="input-group" style="width: 150px;">
                             <button class="btn btn-outline-secondary" type="button">-</button>
-                            <input type="text" class="form-control text-center" value="1">
+                            <input type="text" class="form-control text-center" id="quantityInput" value="1">
                             <button class="btn btn-outline-secondary" type="button">+</button>
                         </div>
                     </div>
-                    @*Thêm vào giả hàng*@
-                    <button class="btn btn-outline-primary add-to-cart-btn" data-id="@Model.Id">
-                        <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+
+                    <!-- Thêm vào giỏ -->
+                    <button class="btn btn-success add-to-cart-with-qty-btn"
+                            data-id="@Model.Id"
+                            data-qty-selector="#quantityInput">
+                        Thêm vào giỏ hàng
                     </button>
 
+
                     @*Mua ngay*@
-                    <a href="@Url.Action("Checkout", "Cart")" class="btn btn-outline-primary">Mua ngay</a>
+
+                    <form action="@Url.Action("BuyNow", "Cart")" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="productId" value="@Model.Id" />
+                        <input type="hidden" name="quantity" id="buyNowQty" value="1" />
+                        <button type="submit" class="btn btn-outline-primary">Mua ngay</button>
+                    </form>
 
                 </div>
 
@@ -110,25 +122,44 @@
 
 @*Tăng giá trị số lượng*@
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const btns = document.querySelectorAll('.input-group button');
+        document.addEventListener('DOMContentLoaded', function () {
+            const btns = document.querySelectorAll('.input-group button');
 
-        btns.forEach(btn => {
-            btn.addEventListener('click', function () {
-                const input = this.parentElement.querySelector('input');
-                let value = parseInt(input.value) || 0;
-                const stock = parseInt('@Model.Stock');
+            btns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const input = this.parentElement.querySelector('input');
+                    let value = parseInt(input.value) || 0;
+                    const stock = parseInt('@Model.Stock');
 
-                if (this.textContent.trim() === '+') {
-                    if (value < stock) value++;
-                } else if (this.textContent.trim() === '-') {
-                    if (value > 1) value--;
-                }
+                    if (this.textContent.trim() === '+') {
+                        if (value < stock) value++;
+                    } else if (this.textContent.trim() === '-') {
+                        if (value > 1) value--;
+                    }
 
-                input.value = value;
+                    input.value = value;
+                });
+            });
+
+            // Gắn sự kiện cập nhật số lượng cho form "Mua ngay"
+            const qtyInput = document.getElementById("quantityInput");
+            const buyNowQty = document.getElementById("buyNowQty");
+
+            qtyInput.addEventListener("input", function () {
+                buyNowQty.value = qtyInput.value;
+            });
+
+            // Đồng bộ nếu tăng/giảm bằng nút
+            const buttons = document.querySelectorAll(".input-group button");
+            buttons.forEach(btn => {
+                btn.addEventListener("click", function () {
+                    buyNowQty.value = qtyInput.value;
+                });
             });
         });
-    });
-</script>
+    </script>
+
+
+
 
 
