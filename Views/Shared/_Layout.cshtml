@@ -29,7 +29,17 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <!-- Menu bên trái -->
                 <ul class="navbar-nav me-auto">
+                    @{
+                        var role = Session["UserRole"] as string;
+                    }
+
+                    @if (!string.IsNullOrEmpty(role) && role == "Admin")
+                    {
+                    <li class="nav-item">@Html.ActionLink("Dashboard", "Dashboard", "Admin", null, new { @class = "nav-link active" })</li>
+                    }
+                    else{
                     <li class="nav-item">@Html.ActionLink("Trang chủ", "Index", "Home", null, new { @class = "nav-link active" })</li>
+                    }
                     <li class="nav-item">@Html.ActionLink("Giới thiệu", "About", "Home", null, new { @class = "nav-link active" })</li>
                     <li class="nav-item">@Html.ActionLink("Liên hệ", "Contact", "Home", null, new { @class = "nav-link active" })</li>
 

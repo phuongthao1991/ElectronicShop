@@ -3,69 +3,70 @@
     ViewBag.Title = "Xác nhận đặt hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="container mt-3">
+    <h4>Xác nhận đơn hàng</h4>
 
-<h2>Xác nhận đơn hàng</h2>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
+    @using (Html.BeginForm("UpdateQuantity", "Cart", FormMethod.Post))
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Hình ảnh</th>
+                <th>Số lượng</th>
+                <th>Giá</th>
+                <th>Thành tiền</th>
+            </tr>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>@Model[i].ProductName</td>
+                    <td>
+                        <img src="@Url.Content("~/Content/Images/Products/" + Model[i].ImageUrl ?? "~/Content/Images/no-image.png")" width="80" class="img-thumbnail" />
+                    </td>
+                    <td>
+                        <div class="input-group" style="max-width: 120px;">
+                            <div class="input-group-prepend">
+                                <button type="submit" name="action" value="decrease-@Model[i].ProductId" class="btn btn-outline-secondary btn-sm">-</button>
+                            </div>
+                            <input type="text" name="quantities[@Model[i].ProductId]" value="@Model[i].Quantity" class="form-control text-center" readonly />
+                            <div class="input-group-append">
+                                <button type="submit" name="action" value="increase-@Model[i].ProductId" class="btn btn-outline-secondary btn-sm">+</button>
+                            </div>
+                        </div>
+                    </td>
+                    <td>@Model[i].Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) ₫</td>
+                    @{
+                        var Total = Model[i].Price * Model[i].Quantity;
+                    }
+                    <td>@Total.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) ₫</td>
+                </tr>
+            }
+        </table>
+    }
 
-@using (Html.BeginForm("UpdateQuantity", "Cart", FormMethod.Post))
-{
-    <table class="table table-bordered">
-        <tr>
-            <th>Sản phẩm</th>
-            <th>Hình ảnh</th>
-            <th>Số lượng</th>
-            <th>Giá</th>
-            <th>Thành tiền</th>
-        </tr>
-        @for (int i = 0; i < Model.Count; i++)
-        {
-    <tr>
-        <td>@Model[i].ProductName</td>
-        <td>
-            <img src="@Url.Content("~/Content/Images/Products/" + Model[i].ImageUrl ?? "~/Content/Images/no-image.png")" width="80" class="img-thumbnail" />
-        </td>
-        <td>
-            <div class="input-group" style="max-width: 120px;">
-                <div class="input-group-prepend">
-                    <button type="submit" name="action" value="decrease-@Model[i].ProductId" class="btn btn-outline-secondary btn-sm">-</button>
-                </div>
-                <input type="text" name="quantities[@Model[i].ProductId]" value="@Model[i].Quantity" class="form-control text-center" readonly />
-                <div class="input-group-append">
-                    <button type="submit" name="action" value="increase-@Model[i].ProductId" class="btn btn-outline-secondary btn-sm">+</button>
-                </div>
-            </div>
-        </td>
-        <td>@Model[i].Price.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) ₫</td>
-        @{ 
-            var Total = Model[i].Price * Model[i].Quantity;
-        }
-        <td>@Total.ToString("N0", new System.Globalization.CultureInfo("vi-VN")) ₫</td>
-    </tr>
-        }
-    </table>
-}
+    <h4 class="text-right">
+        Tổng tiền: <strong>@Model.Sum(i => i.Price * i.Quantity).ToString("N0") ₫</strong>
+    </h4>
 
-<h4 class="text-right">
-    Tổng tiền: <strong>@Model.Sum(i => i.Price * i.Quantity).ToString("N0") ₫</strong>
-</h4>
+    @using (Html.BeginForm("Checkout", "Cart", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm("Checkout", "Cart", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label>Phương thức thanh toán:</label>
+            <select name="paymentMethod" class="form-control" required>
+                <option value="COD">Thanh toán khi nhận hàng</option>
+                <option value="Banking">Chuyển khoản ngân hàng</option>
+            </select>
+        </div>
 
-    <div class="form-group">
-        <label>Phương thức thanh toán:</label>
-        <select name="paymentMethod" class="form-control" required>
-            <option value="COD">Thanh toán khi nhận hàng</option>
-            <option value="Banking">Chuyển khoản ngân hàng</option>
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-success">
-        <i class="fa fa-check"></i> Xác nhận đặt hàng
-    </button>
-}
+        <button type="submit" class="btn btn-success">
+            <i class="fa fa-check"></i> Xác nhận đặt hàng
+        </button>
+    }
+</div>

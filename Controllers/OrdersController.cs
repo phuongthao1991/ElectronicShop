@@ -9,9 +9,11 @@ using System.Web;
 using System.Web.Mvc;
 using ElectronicShop.Data;
 using ElectronicShop.Models;
+using ElectronicShop.Filters;
 
 namespace ElectronicShop.Controllers
 {
+    [AdminAuthorize]
     public class OrdersController : BaseController
     {
         private ElectronicShopContext db = new ElectronicShopContext();

@@ -1,59 +1,59 @@
 ﻿@{
     ViewBag.Title = "Admin Dashboard";
 }
+<div class="container mt-3">
+    <h4>Dashboard</h4>
+    <ul class="nav nav-pills mb-4">
+        <li class="nav-item">
+            @Html.ActionLink("Quản lý sản phẩm", "Index", "Products", null, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Quản lý danh mục", "Index", "Categories", null, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Đơn hàng", "Index", "Orders", null, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Chi tiết đơn hàng", "Index", "OrderDetails", null, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Người dùng", "Index", "Users", null, new { @class = "nav-link" })
+        </li>
+    </ul>
 
-<h2>Trang Quản Trị</h2>
-<h2>Quản trị nhanh</h2>
-<ul class="nav nav-pills mb-4">
-    <li class="nav-item">
-        @Html.ActionLink("Quản lý sản phẩm", "Index", "Products", null, new { @class = "nav-link" })
-    </li>
-    <li class="nav-item">
-        @Html.ActionLink("Quản lý danh mục", "Index", "Categories", null, new { @class = "nav-link" })
-    </li>
-    <li class="nav-item">
-        @Html.ActionLink("Đơn hàng", "Index", "Orders", null, new { @class = "nav-link" })
-    </li>
-    <li class="nav-item">
-        @Html.ActionLink("Chi tiết đơn hàng", "Index", "OrderDetails", null, new { @class = "nav-link" })
-    </li>
-    <li class="nav-item">
-        @Html.ActionLink("Người dùng", "Index", "Users", null, new { @class = "nav-link" })
-    </li>
-</ul>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white p-3 rounded">
+                <h4>Người dùng</h4>
+                <p>@ViewBag.UserCount</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white p-3 rounded">
+                <h4>Sản phẩm</h4>
+                <p>@ViewBag.ProductCount</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark p-3 rounded">
+                <h4>Danh mục</h4>
+                <p>@ViewBag.CategoryCount</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white p-3 rounded">
+                <h4>Đơn hàng</h4>
+                <p>@ViewBag.OrderCount</p>
+            </div>
+        </div>
+    </div>
 
-<div class="row">
-    <div class="col-md-3">
-        <div class="card bg-primary text-white p-3 rounded">
-            <h4>Người dùng</h4>
-            <p>@ViewBag.UserCount</p>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-success text-white p-3 rounded">
-            <h4>Sản phẩm</h4>
-            <p>@ViewBag.ProductCount</p>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-warning text-dark p-3 rounded">
-            <h4>Danh mục</h4>
-            <p>@ViewBag.CategoryCount</p>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-danger text-white p-3 rounded">
-            <h4>Đơn hàng</h4>
-            <p>@ViewBag.OrderCount</p>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col-md-12">
-        <div class="card bg-light p-4 rounded">
-            <h4>Tổng doanh thu</h4>
-            <h3>@ViewBag.TotalRevenue.ToString("N0") VNĐ</h3>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card bg-light p-4 rounded">
+                <h4>Tổng doanh thu</h4>
+                <h3>@ViewBag.TotalRevenue.ToString("N0") VNĐ</h3>
+            </div>
         </div>
     </div>
 </div>
