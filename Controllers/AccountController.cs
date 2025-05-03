@@ -5,12 +5,20 @@ using ElectronicShop.Models;
 using ElectronicShop.Helpers;
 using System;
 using System.Web;
+using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace ElectronicShop.Controllers
 {
     public class AccountController : BaseController
     {
         private ElectronicShopContext db = new ElectronicShopContext();
+
+        // GET: Users
+        public async Task<ActionResult> Index()
+        {
+            return View(await db.Users.ToListAsync());
+        }
 
         // GET: /Account/Login
         public ActionResult Login(string returnUrl)

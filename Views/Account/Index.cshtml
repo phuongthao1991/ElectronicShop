@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ElectronicShop.Models.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container mt-3">
+    <h4>Index user</h4>
+
+    <p>
+        @Html.ActionLink("Register", "Register")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role)
+                </td>
+                <td>
+                    @Html.ActionLink("ForgotPassword", "ForgotPassword", new { id = item.Id }) |
+                    @Html.ActionLink("UserProfile", "UserProfile", new { id = item.Id }) |
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
