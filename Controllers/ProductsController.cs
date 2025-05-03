@@ -208,7 +208,7 @@ namespace ElectronicShop.Controllers
 
         // Xem sản phẩm theo danh mục
         [AllowAnonymous]
-        public ActionResult ByCategory(int categoryId, int page = 1, int pageSize = 3)
+        public ActionResult ByCategory(int categoryId, int page = 1, int pageSize = 6)
         {
             var products = db.Products
                 .Where(p => p.CategoryId == categoryId)

@@ -12,8 +12,9 @@
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">@Html.ActionLink("Trang chủ", "Index", "Home")</li>
-                    <li class="breadcrumb-item">@Html.ActionLink("Danh mục sản phẩm", "Index", "Categories")</li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh mục sản phẩm</li>
                     <li class="breadcrumb-item active" aria-current="page">Chi tiết sản phẩm</li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
                 </ol>
             </nav>
         </div>
